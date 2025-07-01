@@ -57,7 +57,12 @@ def create_app():
         @CHAT_NS.response(400, 'Bad Request', error_model)
         @CHAT_NS.response(500, 'Internal Server Error', error_model)
         def post(self):
+            ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+            logger.info(f"Received request from IP: {ip}")
+            print(f"Received request from IP: {ip}")
+
             data = request.get_json()
+
             user_input = data.get("message", "")
 
             if not user_input:
